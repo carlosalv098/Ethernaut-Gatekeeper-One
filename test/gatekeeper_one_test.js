@@ -1,3 +1,4 @@
+const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Gatekeeper One", function () {
@@ -9,14 +10,15 @@ describe("Gatekeeper One", function () {
     const GatekeeperAttack = await ethers.getContractFactory("GatekeeperAttack", deployer);
 
     this.gatekeeper = await Gatekeeper.deploy();
-    console.log(await this.gatekeeper.entrant())
     this.gatekeeperAttack = await GatekeeperAttack.deploy(this.gatekeeper.address);
-
+  
+    expect(await this.gatekeeper.entrant()).to.equal('0x0000000000000000000000000000000000000000');
+    
     console.log(`Gatekeeper deployed to ${this.gatekeeper.address}`);
     console.log(`GatekeeperAttack deployed to ${this.gatekeeperAttack.address}`);
 
     await this.gatekeeperAttack.connect(user1).hack();
 
-    console.log(await this.gatekeeper.entrant())
+    expect(await this.gatekeeper.entrant()).to.equal(user1.address);
   });
 });
